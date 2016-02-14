@@ -83,6 +83,8 @@ public class TextBuddy {
 				add(getContent(cmdLine), args);
 			} else if (isDelete(cmdLine)) {
 				delete(Integer.valueOf(getContent(cmdLine)), args);
+			} else if (isSearch(cmdLine)){
+				search(getContent(cmdLine), args);
 			} else {
 				printErrorMessageWithoutStopping();
 			}
@@ -154,6 +156,14 @@ public class TextBuddy {
 
 	public static boolean isClear(String cmdLine) {
 		return cmdLine.equals("clear");
+	}
+
+	private static boolean isSearch(String[] cmdLine) {
+		if (getContent(cmdLine) == null){
+			return false;
+		} else {
+			return getCommand(cmdLine).toLowerCase().equals("search");
+		}
 	}
 
 	/** These are the set of print functions */
@@ -253,6 +263,21 @@ public class TextBuddy {
 		reader.close();
 		
 		filesCleaning(tempFile, editedFile, args);
+	}
+	
+	public static void search(String content, String[] args) throws IOException{
+		File file = new File(fileName(args));
+		String currentLine;
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		
+		createEmptyFile(file, args);
+
+		while ((currentLine = reader.readLine()) != null) {
+			if (currentLine.contains(content)){
+				printOutput(currentLine);
+			}
+		}
+		reader.close();
 	}
 	
 	private static void createEmptyFile(File file, String[] args) throws IOException{
