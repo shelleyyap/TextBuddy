@@ -200,59 +200,58 @@ public class TextBuddy {
 
 	public static void delete(int pointToBeDeleted, String[] args) throws IOException {
 		File file = new File(fileName(args));
-		
-		createEmptyFile(file, args);
-		
-		int pointer = 1;
-		String currentLine;
-		String deletedContent = null;
-		boolean editedFile = false;
-		
 		File tempFile = new File("tempFile.txt");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
 		BufferedReader reader = new BufferedReader(new FileReader(file));
+		int pointer = 1;
+		String currentLine;
+		boolean editedFile = false;
+		
+		createEmptyFile(file, args);
 		
 		while ((currentLine = reader.readLine()) != null) {
 			String pointNumber = currentLine.substring(0, currentLine.indexOf("."));
 			String contentOfPoint = currentLine.substring(currentLine.indexOf(" "));
 			
-			if (pointToBeDeleted > Integer.valueOf(pointNumber)) {
-				printOutput(MESSAGE_DELETED_DOES_NOT_EXIST);
-				break;
-			} else if (Integer.valueOf(pointNumber) == pointToBeDeleted) {
-				deletedContent = contentOfPoint;
+			if (Integer.valueOf(pointNumber) == pointToBeDeleted) {
 				editedFile = true;
-				printOutput(MESSAGE_DELETED, fileName(args),
-						deletedContent);
+				printOutput(MESSAGE_DELETED, fileName(args), contentOfPoint);
 				continue;
-			} else if (pointNumber.equals(pointer)) {
-				continue;
-			} else {
+			} else if (!pointNumber.equals(pointer)){
 				String pointerStr = (String.valueOf(pointer)).concat(".");
 				currentLine = pointerStr.concat(contentOfPoint);
 			}
 			pointer++;
 			writer.write(currentLine + System.getProperty("line.separator"));
-
 		}
+		
 		writer.close();
 		reader.close();
 		
-		if (editedFile) {
-			writer.close();
-			reader.close();
-			File input = new File(fileName(args));
-			input.delete();
-			new File("tempFile.txt").renameTo(input);
-		}
-		if (tempFile.exists()){
-			tempFile.delete();
-		}
+		filesCleaning(tempFile, editedFile, args);
 	}
 	
 	private static void createEmptyFile(File file, String[] args) throws IOException{
 		if (file.createNewFile()) {
 			printOutput(MESSAGE_CREATE_EMPTY_FILE, fileName(args));
 		}
+	}
+	
+	private static void renameFile(String[] args){
+		File input = new File(fileName(args));
+		input.delete();
+		new File("tempFile.txt").renameTo(input);
+	}
+	
+	private static void filesCleaning(File tempFile, boolean editedFile, String[] args){
+		if (editedFile) {
+			renameFile(args);
+		} else {
+			System.out.println(MESSAGE_DELETED_DOES_NOT_EXIST);
+		}
+		
+		if (tempFile.exists()){
+			tempFile.delete();
+		}	
 	}
 }
