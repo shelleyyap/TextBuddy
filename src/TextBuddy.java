@@ -17,6 +17,19 @@ import java.io.*;
 
 public class TextBuddy {
 
+	private static final String MESSAGE_CREATE_EMPTY_FILE = "New empty file %s is created.";
+	private static final String MESSAGE_WRONG_FILE_TYPE = "Wrong file type, please input text files.";
+	private static final String MESSAGE_INPUT_TEXT_FILE = "Please input text file.";
+	private static final String MESSAGE_WELCOME = "Welcome to TextBuddy. %s is ready for use \n";
+	private static final String MESSAGE_COMMAND = "command: ";
+	private static final String MESSAGE_WRONG_COMMAND = "Wrong command. Please re-enter command";
+	private static final String MESSAGE_ADD = "added to %s: \"%s\"";
+	private static final String MESSAGE_DELETED = "deleted from %s: %s";
+	private static final String MESSAGE_DELETED_DOES_NOT_EXIST = "Point to be deleted does not exist.";
+	private static final String MESSAGE_SORTED = "File content is sorted!";
+	private static final String MESSAGE_DISPLAY_EMPTY = "%s is empty";
+	private static final String MESSAGE_CLEARED = "all content deleted from %s";
+	
 	public static void main(String[] args) throws IOException {
 		exitIfIncorrectArguments(args);
 		printWelcomeMessage(args);
@@ -31,13 +44,13 @@ public class TextBuddy {
 
 	public static void exitIfNoArguments(String[] args) {
 		if (args.length == 0 && args != null) {
-			stopWithErrorMessage("Please input text file.");
+			stopWithErrorMessage(MESSAGE_INPUT_TEXT_FILE);
 		}
 	}
 
 	public static void exitIfUnacceptableArguments(String[] args) {
 		if (!isTxtFile(args)) {
-			stopWithErrorMessage("Wrong file type, please input text files.");
+			stopWithErrorMessage(MESSAGE_WRONG_FILE_TYPE);
 			System.exit(0);
 		}
 	}
@@ -48,7 +61,7 @@ public class TextBuddy {
 	}
 
 	public static void printWelcomeMessage(String[] args) {
-		System.out.printf("Welcome to TextBuddy. %s is ready for use\n",
+		System.out.printf(MESSAGE_WELCOME,
 				fileName(args));
 	}
 
@@ -121,15 +134,15 @@ public class TextBuddy {
 
 	/** These are the set of print functions */
 	public static void printCommand() {
-		System.out.print("command: ");
+		System.out.print(MESSAGE_COMMAND);
 	}
 
-	public static void printOutput(String content, String fileName) {
-		System.out.printf(content.concat("\n"), fileName);
+	public static void printOutput(String content, Object... variables){
+		System.out.printf(content + "\n", variables);
 	}
 
 	public static void printErrorMessageWithoutStopping() {
-		System.out.println("Wrong command. Please re-enter command");
+		System.out.println(MESSAGE_WRONG_COMMAND);
 	}
 
 	/**
@@ -146,11 +159,11 @@ public class TextBuddy {
 	public static void display(String[] args) throws IOException {
 		File file = new File(fileName(args));
 		if (file.createNewFile()) {
-			printOutput("New empty file %s is created.", fileName(args));
+			printOutput(MESSAGE_CREATE_EMPTY_FILE, fileName(args));
 		} else {
 			Scanner sc = new Scanner(file);
 			if (file.length() == 0) {
-				printOutput("%s is empty", fileName(args));
+				printOutput(MESSAGE_DISPLAY_EMPTY, fileName(args));
 			} else {
 				while (sc.hasNextLine()) {
 					String line = sc.nextLine();
@@ -164,11 +177,11 @@ public class TextBuddy {
 	public static void clear(String[] args) throws IOException {
 		File file = new File(fileName(args));
 		if (file.createNewFile()) {
-			printOutput("New empty file %s is created.", fileName(args));
+			printOutput(MESSAGE_CREATE_EMPTY_FILE, fileName(args));
 		} else {
 			PrintWriter inFile = new PrintWriter(fileName(args));
 			inFile.close();
-			printOutput("all content deleted from %s", fileName(args));
+			printOutput(MESSAGE_CLEARED, fileName(args));
 		}
 	}
 
@@ -186,14 +199,14 @@ public class TextBuddy {
 		writer.println(pointerStr); // for add
 		reader.close();
 		writer.close();
-		System.out.printf("added to %s: \"%s\"\n", fileName(args), content);
+		printOutput(MESSAGE_ADD, fileName(args), content);
 	}
 
 	public static void delete(int pointToBeDeleted, String[] args) throws IOException {
 		File file = new File(fileName(args));
 		
 		if (file.createNewFile()) {
-			printOutput("New empty file %s is created.", fileName(args));
+			printOutput(MESSAGE_CREATE_EMPTY_FILE, fileName(args));
 		}
 		
 		int pointer = 1;
@@ -210,12 +223,12 @@ public class TextBuddy {
 			String contentOfPoint = currentLine.substring(currentLine.indexOf(" "));
 			
 			if (pointToBeDeleted > Integer.valueOf(pointNumber)) {
-				System.out.println("Point to be deleted does not exist.");
+				System.out.println(MESSAGE_DELETED_DOES_NOT_EXIST);
 				break;
 			} else if (Integer.valueOf(pointNumber) == pointToBeDeleted) {
 				deletedContent = contentOfPoint;
 				editedFile = true;
-				System.out.printf("deleted from %s: %s \n", fileName(args),
+				printOutput(MESSAGE_DELETED, fileName(args),
 						deletedContent);
 				continue;
 			} else if (pointNumber.equals(pointer)) {
