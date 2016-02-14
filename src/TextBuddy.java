@@ -30,6 +30,10 @@ public class TextBuddy {
 	private static final String MESSAGE_DISPLAY_EMPTY = "%s is empty";
 	private static final String MESSAGE_CLEARED = "all content deleted from %s";
 	
+	private static final int CONTENT_ARRAY_SIZE = 2;
+	private static final int CONTENT_ARRAY_COMMAND = 0;
+	private static final int CONTENT_ARRAY_CONTENT = 1;
+	
 	public static void main(String[] args) throws IOException {
 		exitIfIncorrectArguments(args);
 		printWelcomeMessage(args);
@@ -65,36 +69,48 @@ public class TextBuddy {
 				fileName(args));
 	}
 
-	public static void executeCommandsUntilExitCommand(String[] args)
+	private static void executeCommandsUntilExitCommand(String[] args)
 			throws IOException {
 		Scanner sc = new Scanner(System.in);
 		printCommand();
-		String cmdLine = sc.nextLine();
-		while (!isExitCommand(cmdLine)) {
-			int indexOfSpace = cmdLine.indexOf(" ");
-			if (isCommandWithoutContent(indexOfSpace)) {
-				if (isDisplay(cmdLine.toLowerCase())) {
-					display(args);
-				} else if (isClear(cmdLine.toLowerCase())) {
-					clear(args);
-				} else {
-					printErrorMessageWithoutStopping();
-				}
+		String[] cmdLine = splitCommand(sc.nextLine());
+		while (!isExitCommand(getCommand(cmdLine))) {
+			if (isDisplay(getCommand(cmdLine))){
+				display(args);
+			} else if (isClear(getCommand(cmdLine))) {
+				clear(args);
+			} else  if (isAdd(cmdLine)) {
+				add(getContent(cmdLine), args);
+			} else if (isDelete(cmdLine)) {
+				delete(Integer.valueOf(getContent(cmdLine)), args);
 			} else {
-				String cmd = cmdLine.substring(0, indexOfSpace).toLowerCase();
-				String content = cmdLine.substring(indexOfSpace + 1);
-				if (isAdd(cmd)) {
-					add(content, args);
-				} else if (isDelete(cmd)) {
-					delete(Integer.valueOf(content), args);
-				} else {
-					printErrorMessageWithoutStopping();
-				}
+				printErrorMessageWithoutStopping();
 			}
 			printCommand();
-			cmdLine = sc.nextLine();
+			cmdLine = splitCommand(sc.nextLine());
 		}
 		sc.close();
+	}
+	
+	private static String[] splitCommand(String cmdLine){
+		int indexOfSpace = cmdLine.indexOf(" ");
+		String[] cmdAndContent = new String[CONTENT_ARRAY_SIZE];
+		if (indexOfSpace == -1){
+			cmdAndContent[CONTENT_ARRAY_COMMAND] = cmdLine;
+			cmdAndContent[CONTENT_ARRAY_CONTENT] = null;
+		} else {
+			cmdAndContent[CONTENT_ARRAY_COMMAND] = cmdLine.substring(0, indexOfSpace);
+			cmdAndContent[CONTENT_ARRAY_CONTENT] = cmdLine.substring(indexOfSpace + 1);
+		}
+		return cmdAndContent;
+	}
+
+	private static String getCommand(String[] cmdAndContent){
+		return cmdAndContent[CONTENT_ARRAY_COMMAND];
+	}
+
+	private static String getContent(String[] cmdAndContent){
+		return cmdAndContent[CONTENT_ARRAY_CONTENT];
 	}
 
 	/** These are the set of boolean functions. */
@@ -120,12 +136,20 @@ public class TextBuddy {
 		return cmdLine.equals("display");
 	}
 
-	public static boolean isAdd(String cmdLine) {
-		return cmdLine.equals("add");
+	private static boolean isAdd(String[] cmdLine) {
+		if (getContent(cmdLine) == null){
+			return false;
+		} else {
+			return getCommand(cmdLine).toLowerCase().equals("add");
+		}
 	}
 
-	public static boolean isDelete(String cmdLine) {
-		return cmdLine.equals("delete");
+	private static boolean isDelete(String[] cmdLine) {
+		if (getContent(cmdLine) == null){
+			return false;
+		} else {
+			return getCommand(cmdLine).toLowerCase().equals("delete");
+		}
 	}
 
 	public static boolean isClear(String cmdLine) {
