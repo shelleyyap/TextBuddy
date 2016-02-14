@@ -1,0 +1,13 @@
+display
+deLete
+add
+aDd little brown fox
+dIsplAy
+add jumped over the moon
+delete 3
+display
+random command
+DelEte 1
+display
+clear
+exit

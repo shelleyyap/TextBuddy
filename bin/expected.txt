@@ -1,0 +1,15 @@
+Welcome to TextBuddy. mytextfile.txt is ready for use
+command: mytextfile.txt is empty
+command: Wrong command. Please re-enter command
+command: Wrong command. Please re-enter command
+command: added to mytextfile.txt: "little brown fox"
+command: 1. little brown fox
+command: added to mytextfile.txt: "jumped over the moon"
+command: Point to be deleted does not exist.
+command: 1. little brown fox
+2. jumped over the moon
+command: Wrong command. Please re-enter command
+command: deleted from mytextfile.txt:  little brown fox 
+command: 1. jumped over the moon
+command: all content deleted from mytextfile.txt
+command: 
