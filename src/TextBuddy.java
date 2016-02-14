@@ -127,20 +127,11 @@ public class TextBuddy {
 	}
 
 	public static boolean isExitCommand(String cmdLine) {
-		return cmdLine.equals("exit");
-	}
-
-	/** This checks if the command given is delete or clear.
-	 * 
-	 * @param indexOfSpace This parameter checks whether there is a space
-	 * 					   after the command (delete or clear) is given.
-	 */ 
-	public static boolean isCommandWithoutContent(int indexOfSpace) {
-		return indexOfSpace == -1;
+		return cmdLine.toLowerCase().equals("exit");
 	}
 
 	public static boolean isDisplay(String cmdLine) {
-		return cmdLine.equals("display");
+		return cmdLine.toLowerCase().equals("display");
 	}
 
 	private static boolean isAdd(String[] cmdLine) {
@@ -160,7 +151,7 @@ public class TextBuddy {
 	}
 
 	public static boolean isClear(String cmdLine) {
-		return cmdLine.equals("clear");
+		return cmdLine.toLowerCase().equals("clear");
 	}
 
 	private static boolean isSearch(String[] cmdLine) {
@@ -209,7 +200,7 @@ public class TextBuddy {
 		} else {
 			while (sc.hasNextLine()) {
 				String line = sc.nextLine();
-				System.out.println(line);
+				printOutput(line);
 			}
 		}
 		sc.close();
