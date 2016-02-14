@@ -12,6 +12,8 @@
  *    a new text file with the file name passed in will be created. Similarly for 
  *    the command clear and delete.
  */
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.io.*;
 
@@ -79,6 +81,8 @@ public class TextBuddy {
 				display(args);
 			} else if (isClear(getCommand(cmdLine))) {
 				clear(args);
+			} else if (isSort(getCommand(cmdLine))) {
+				sort(args);
 			} else  if (isAdd(cmdLine)) {
 				add(getContent(cmdLine), args);
 			} else if (isDelete(cmdLine)) {
@@ -164,6 +168,10 @@ public class TextBuddy {
 		} else {
 			return getCommand(cmdLine).toLowerCase().equals("search");
 		}
+	}
+	
+	private static boolean isSort(String cmdLine) {
+		return cmdLine.toLowerCase().equals("sort");
 	}
 
 	/** These are the set of print functions */
@@ -280,6 +288,32 @@ public class TextBuddy {
 		reader.close();
 	}
 	
+	public static void sort(String[] args) throws IOException {
+		ArrayList<String> fileContent = new ArrayList<String>();
+		File file = new File(fileName(args));
+		String currentLine;		
+		File tempFile = new File("tempFile.txt");
+		BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		
+		createEmptyFile(file, args);
+		
+		while ((currentLine = reader.readLine()) != null) {
+			String contentOfPoint = currentLine.substring(currentLine.indexOf(" "));
+			fileContent.add(contentOfPoint);
+		}
+		
+		Collections.sort(fileContent);
+		
+		writeToFile(writer, fileContent);
+		
+		writer.close();
+		reader.close();
+
+		renameFile(args);
+		printOutput(MESSAGE_SORTED);
+	}
+	
 	private static void createEmptyFile(File file, String[] args) throws IOException{
 		if (file.createNewFile()) {
 			printOutput(MESSAGE_CREATE_EMPTY_FILE, fileName(args));
@@ -302,5 +336,13 @@ public class TextBuddy {
 		if (tempFile.exists()){
 			tempFile.delete();
 		}	
+	}
+	
+	private static void writeToFile(BufferedWriter writer, ArrayList<String> fileContent) throws IOException{
+		int iterator = 1;
+		for(String line : fileContent){
+			writer.write(iterator + "." + line + "\n");
+			iterator++;
+		}
 	}
 }
