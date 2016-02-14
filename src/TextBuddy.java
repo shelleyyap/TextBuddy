@@ -1,7 +1,6 @@
-
 /**
  * This class is used to manipulate text in a file. Only add, delete, display
- * and clear commands are available in this version. The output will be of the
+ * clear, search and sort commands are available in this version. The output will be of the
  * form of numerical pointers. 
  * 
  * Assumptions: 
@@ -11,6 +10,8 @@
  * 3. For the command display, if the file does not exist and the command is called,
  *    a new text file with the file name passed in will be created. Similarly for 
  *    the command clear and delete.
+ * 4. If add, delete and search are used without specifying content, an error message is
+ *    displayed.
  */
 import java.util.ArrayList;
 import java.util.Collections;
