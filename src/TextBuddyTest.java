@@ -7,5 +7,6 @@ public class TextBuddyTest {
 		String[] fileNama = new String[1];
 		fileNama[0] = "file.txt";
 		assertTrue(TextBuddy.isTxtFile(fileNama));
+		assertTrue(TextBuddy.isExitCommand("exit"));
 	}
 }
