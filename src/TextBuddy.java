@@ -27,22 +27,22 @@ import java.util.Scanner;
 
 public class TextBuddy {
 
-	private static final String MESSAGE_CREATE_EMPTY_FILE = "New empty file %s is created.";
-	private static final String MESSAGE_WRONG_FILE_TYPE = "Wrong file type, please input text files.";
-	private static final String MESSAGE_INPUT_TEXT_FILE = "Please input text file.";
-	private static final String MESSAGE_WELCOME = "Welcome to TextBuddy. %s is ready for use \n";
-	private static final String MESSAGE_COMMAND = "command: ";
-	private static final String MESSAGE_WRONG_COMMAND = "Wrong command. Please re-enter command";
-	private static final String MESSAGE_ADD = "added to %s: \"%s\"";
-	private static final String MESSAGE_DELETED = "deleted from %s: %s";
-	private static final String MESSAGE_DELETED_DOES_NOT_EXIST = "Point to be deleted does not exist.";
-	private static final String MESSAGE_SORTED = "File content is sorted!";
-	private static final String MESSAGE_DISPLAY_EMPTY = "%s is empty";
-	private static final String MESSAGE_CLEARED = "all content deleted from %s";
+	public static final String MESSAGE_CREATE_EMPTY_FILE = "New empty file %s is created.";
+	public static final String MESSAGE_WRONG_FILE_TYPE = "Wrong file type, please input text files.";
+	public static final String MESSAGE_INPUT_TEXT_FILE = "Please input text file.";
+	public static final String MESSAGE_WELCOME = "Welcome to TextBuddy. %s is ready for use \n";
+	public static final String MESSAGE_COMMAND = "command: ";
+	public static final String MESSAGE_WRONG_COMMAND = "Wrong command. Please re-enter command";
+	public static final String MESSAGE_ADD = "added to %s: \"%s\"";
+	public static final String MESSAGE_DELETED = "deleted from %s: %s";
+	public static final String MESSAGE_DELETED_DOES_NOT_EXIST = "Point to be deleted does not exist.";
+	public static final String MESSAGE_SORTED = "File content is sorted!";
+	public static final String MESSAGE_DISPLAY_EMPTY = "%s is empty";
+	public static final String MESSAGE_CLEARED = "all content deleted from %s";
 	
-	private static final int CONTENT_ARRAY_SIZE = 2;
-	private static final int CONTENT_ARRAY_COMMAND = 0;
-	private static final int CONTENT_ARRAY_CONTENT = 1;
+	public static final int CONTENT_ARRAY_SIZE = 2;
+	public static final int CONTENT_ARRAY_COMMAND = 0;
+	public static final int CONTENT_ARRAY_CONTENT = 1;
 	
 	public static void main(String[] args) throws IOException {
 		exitIfIncorrectArguments(args);
@@ -79,7 +79,7 @@ public class TextBuddy {
 				fileName(args));
 	}
 
-	private static void executeCommandsUntilExitCommand(String[] args)
+	public static void executeCommandsUntilExitCommand(String[] args)
 			throws IOException {
 		Scanner sc = new Scanner(System.in);
 		printCommand();
@@ -106,7 +106,7 @@ public class TextBuddy {
 		sc.close();
 	}
 	
-	private static String[] splitCommand(String cmdLine){
+	public static String[] splitCommand(String cmdLine){
 		int indexOfSpace = cmdLine.indexOf(" ");
 		String[] cmdAndContent = new String[CONTENT_ARRAY_SIZE];
 		if (indexOfSpace == -1){
@@ -119,11 +119,11 @@ public class TextBuddy {
 		return cmdAndContent;
 	}
 
-	private static String getCommand(String[] cmdAndContent){
+	public static String getCommand(String[] cmdAndContent){
 		return cmdAndContent[CONTENT_ARRAY_COMMAND];
 	}
 
-	private static String getContent(String[] cmdAndContent){
+	public static String getContent(String[] cmdAndContent){
 		return cmdAndContent[CONTENT_ARRAY_CONTENT];
 	}
 
@@ -141,7 +141,7 @@ public class TextBuddy {
 		return cmdLine.toLowerCase().equals("display");
 	}
 
-	private static boolean isAdd(String[] cmdLine) {
+	public static boolean isAdd(String[] cmdLine) {
 		if (getContent(cmdLine) == null){
 			return false;
 		} else {
@@ -149,7 +149,7 @@ public class TextBuddy {
 		}
 	}
 
-	private static boolean isDelete(String[] cmdLine) {
+	public static boolean isDelete(String[] cmdLine) {
 		if (getContent(cmdLine) == null){
 			return false;
 		} else {
@@ -161,7 +161,7 @@ public class TextBuddy {
 		return cmdLine.toLowerCase().equals("clear");
 	}
 
-	private static boolean isSearch(String[] cmdLine) {
+	public static boolean isSearch(String[] cmdLine) {
 		if (getContent(cmdLine) == null){
 			return false;
 		} else {
@@ -169,7 +169,7 @@ public class TextBuddy {
 		}
 	}
 	
-	private static boolean isSort(String cmdLine) {
+	public static boolean isSort(String cmdLine) {
 		return cmdLine.toLowerCase().equals("sort");
 	}
 
@@ -313,19 +313,19 @@ public class TextBuddy {
 		printOutput(MESSAGE_SORTED);
 	}
 	
-	private static void createEmptyFile(File file, String[] args) throws IOException{
+	public static void createEmptyFile(File file, String[] args) throws IOException{
 		if (file.createNewFile()) {
 			printOutput(MESSAGE_CREATE_EMPTY_FILE, fileName(args));
 		}
 	}
 	
-	private static void renameFile(String[] args){
+	public static void renameFile(String[] args){
 		File input = new File(fileName(args));
 		input.delete();
 		new File("tempFile.txt").renameTo(input);
 	}
 	
-	private static void filesCleaning(File tempFile, boolean editedFile, String[] args){
+	public static void filesCleaning(File tempFile, boolean editedFile, String[] args){
 		if (editedFile) {
 			renameFile(args);
 		} else {
@@ -337,7 +337,7 @@ public class TextBuddy {
 		}	
 	}
 	
-	private static void writeToFile(BufferedWriter writer, ArrayList<String> fileContent) throws IOException{
+	public static void writeToFile(BufferedWriter writer, ArrayList<String> fileContent) throws IOException{
 		int iterator = 1;
 		for(String line : fileContent){
 			writer.write(iterator + "." + line + "\n");
