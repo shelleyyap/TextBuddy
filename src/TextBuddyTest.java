@@ -8,5 +8,6 @@ public class TextBuddyTest {
 		fileNama[0] = "file.txt";
 		assertTrue(TextBuddy.isTxtFile(fileNama));
 		assertTrue(TextBuddy.isExitCommand("exit"));
+		assertEquals("file.txt", TextBuddy.fileName(fileNama));
 	}
 }
