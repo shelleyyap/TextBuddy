@@ -13,10 +13,17 @@
  * 4. If add, delete and search are used without specifying content, an error message is
  *    displayed.
  */
+
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
-import java.io.*;
 
 public class TextBuddy {
 
