@@ -158,31 +158,27 @@ public class TextBuddy {
 	 */
 	public static void display(String[] args) throws IOException {
 		File file = new File(fileName(args));
-		if (file.createNewFile()) {
-			printOutput(MESSAGE_CREATE_EMPTY_FILE, fileName(args));
+		createEmptyFile(file, args);
+
+		Scanner sc = new Scanner(file);
+		if (file.length() == 0) {
+			printOutput(MESSAGE_DISPLAY_EMPTY, fileName(args));
 		} else {
-			Scanner sc = new Scanner(file);
-			if (file.length() == 0) {
-				printOutput(MESSAGE_DISPLAY_EMPTY, fileName(args));
-			} else {
-				while (sc.hasNextLine()) {
-					String line = sc.nextLine();
-					System.out.println(line);
-				}
+			while (sc.hasNextLine()) {
+				String line = sc.nextLine();
+				System.out.println(line);
 			}
-			sc.close();
 		}
+		sc.close();
 	}
 
 	public static void clear(String[] args) throws IOException {
 		File file = new File(fileName(args));
-		if (file.createNewFile()) {
-			printOutput(MESSAGE_CREATE_EMPTY_FILE, fileName(args));
-		} else {
-			PrintWriter inFile = new PrintWriter(fileName(args));
-			inFile.close();
-			printOutput(MESSAGE_CLEARED, fileName(args));
-		}
+		createEmptyFile(file, args);
+
+		PrintWriter inFile = new PrintWriter(fileName(args));
+		inFile.close();
+		printOutput(MESSAGE_CLEARED, fileName(args));
 	}
 
 	public static void add(String content, String[] args) throws IOException {
@@ -205,9 +201,7 @@ public class TextBuddy {
 	public static void delete(int pointToBeDeleted, String[] args) throws IOException {
 		File file = new File(fileName(args));
 		
-		if (file.createNewFile()) {
-			printOutput(MESSAGE_CREATE_EMPTY_FILE, fileName(args));
-		}
+		createEmptyFile(file, args);
 		
 		int pointer = 1;
 		String currentLine;
@@ -223,7 +217,7 @@ public class TextBuddy {
 			String contentOfPoint = currentLine.substring(currentLine.indexOf(" "));
 			
 			if (pointToBeDeleted > Integer.valueOf(pointNumber)) {
-				System.out.println(MESSAGE_DELETED_DOES_NOT_EXIST);
+				printOutput(MESSAGE_DELETED_DOES_NOT_EXIST);
 				break;
 			} else if (Integer.valueOf(pointNumber) == pointToBeDeleted) {
 				deletedContent = contentOfPoint;
@@ -253,6 +247,12 @@ public class TextBuddy {
 		}
 		if (tempFile.exists()){
 			tempFile.delete();
+		}
+	}
+	
+	private static void createEmptyFile(File file, String[] args) throws IOException{
+		if (file.createNewFile()) {
+			printOutput(MESSAGE_CREATE_EMPTY_FILE, fileName(args));
 		}
 	}
 }
